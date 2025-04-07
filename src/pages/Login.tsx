@@ -17,41 +17,33 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(''); 
+    setError('');
     setIsLoading(true);
-    
-    console.log('Attempting to login with:', { email, password });
     
     try {
       const response = await login(email, password);
-      console.log('Login response (normalized):', response);
       
       // Nettoyage des anciennes données d'authentification
       localStorage.removeItem('token');
       sessionStorage.removeItem('token');
       
       if (response && response.token) {
-        // Utilisation de la réponse normalisée conforme à Swagger
         const token = response.token;
         
         // Enregistre le token dans Redux
         dispatch(setCredentials({ token }));
-        console.log('Token stored in Redux');
         
         // Stocker dans localStorage ou sessionStorage selon l'option "Remember me"
         if (rememberMe) {
           localStorage.setItem('token', token);
-          console.log('Token stored in localStorage (remember me)');
         } else {
           sessionStorage.setItem('token', token);
-          console.log('Token stored in sessionStorage');
         }
         
-        // Vérifier si des données utilisateur sont disponibles dans la réponse originale
+        // Vérifier si des données utilisateur sont disponibles
         const originalResponse = response.originalResponse;
         
         if (originalResponse && originalResponse.body) {
-          // Format API mémoire
           if (originalResponse.body.firstName && originalResponse.body.lastName && originalResponse.body.email) {
             const userData = {
               firstName: originalResponse.body.firstName,
@@ -59,31 +51,41 @@ const Login = () => {
               email: originalResponse.body.email
             };
             dispatch(setUser(userData));
-            console.log('User data stored in Redux:', userData);
           }
         }
         
-        // Attendre que les données soient stockées avant de naviguer
-        setTimeout(() => {
-          console.log('Navigating to profile page...');
-          navigate('/profile');
-        }, 100);
+        navigate('/profile');
       } else {
-        console.error('Format de réponse inattendu:', response);
-        setError('Erreur de format de réponse');
-        setIsLoading(false);
+        setError('Format de réponse invalide');
       }
-    } catch (err) {
-      console.error('Login error:', err);
-      setError('Invalid email or password');
+    } catch (err: any) {
+      if (err.response) {
+        // Erreur serveur avec réponse
+        if (err.response.status === 401) {
+          setError('Email ou mot de passe incorrect');
+        } else if (err.response.status === 500) {
+          setError('Erreur serveur. Veuillez réessayer plus tard.');
+        } else {
+          setError('Une erreur est survenue. Veuillez réessayer.');
+        }
+      } else if (err.request) {
+        // Erreur réseau
+        setError('Problème de connexion. Vérifiez votre connexion internet.');
+      } else {
+        // Autre erreur
+        setError('Une erreur inattendue est survenue.');
+      }
+    } finally {
       setIsLoading(false);
     }
   };
 
-  // Remplir automatiquement les champs pour tester
+  // Fonction de test uniquement en développement
   const fillTestCredentials = () => {
-    setEmail('tony@stark.com');
-    setPassword('password123');
+    if (process.env.NODE_ENV === 'development') {
+      setEmail('tony@stark.com');
+      setPassword('password123');
+    }
   };
 
   return (
@@ -93,7 +95,9 @@ const Login = () => {
         <h1>Sign In</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {isLoading ? (
-          <p className="text-gray-400 my-4">Connexion en cours...</p>
+          <div className="loading-spinner">
+            <p className="text-gray-400 my-4">Connexion en cours...</p>
+          </div>
         ) : (
           <form onSubmit={handleSubmit}>
             <div className="input-wrapper">
@@ -104,6 +108,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isLoading}
               />
             </div>
             <div className="input-wrapper">
@@ -114,6 +119,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={isLoading}
               />
             </div>
             <div className="input-remember">
@@ -122,21 +128,28 @@ const Login = () => {
                 id="remember-me"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
+                disabled={isLoading}
               />
               <label htmlFor="remember-me">Remember me</label>
             </div>
-            <button type="submit" className="sign-in-button">
-              Sign In
+            <button 
+              type="submit" 
+              className="sign-in-button"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Connexion...' : 'Sign In'}
             </button>
             
-            {/* Bouton pour debug uniquement */}
-            <button 
-              type="button" 
-              onClick={fillTestCredentials}
-              style={{ marginTop: '10px', backgroundColor: '#555', padding: '8px' }}
-            >
-              Remplir identifiants de test
-            </button>
+            {process.env.NODE_ENV === 'development' && (
+              <button 
+                type="button" 
+                onClick={fillTestCredentials}
+                className="test-credentials-button"
+                disabled={isLoading}
+              >
+                Remplir identifiants de test
+              </button>
+            )}
           </form>
         )}
       </section>

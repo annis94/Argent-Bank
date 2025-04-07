@@ -30,14 +30,15 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const authState = useSelector((state: RootState) => state.auth);
-  const { isAuthenticated, token, user } = authState;
+  const { isAuthenticated, user } = authState;
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log('Auth state in Profile:', { isAuthenticated, token, user });
+  console.log('Auth state in Profile:', { isAuthenticated, user });
   console.log('Token from localStorage:', localStorage.getItem('token'));
   console.log('Token from sessionStorage:', sessionStorage.getItem('token'));
 
@@ -78,9 +79,22 @@ const Profile = () => {
           setLastName(userData.lastName);
           console.log('User profile data stored in Redux:', userInfo);
         }
-      } catch (err) {
-        console.error('Error fetching user profile:', err);
-        setError('Failed to load user profile');
+      } catch (err: any) {
+        if (err.response) {
+          if (err.response.status === 401) {
+            console.log('User not authenticated, redirecting to login page');
+            navigate('/login');
+          } else {
+            console.error('Error fetching user profile:', err);
+            setError('Erreur lors du chargement du profil. Veuillez réessayer.');
+          }
+        } else if (err.request) {
+          console.error('Error fetching user profile:', err);
+          setError('Problème de connexion. Vérifiez votre connexion internet.');
+        } else {
+          console.error('Error fetching user profile:', err);
+          setError('Une erreur inattendue est survenue.');
+        }
       } finally {
         setLoading(false);
       }
@@ -91,7 +105,7 @@ const Profile = () => {
 
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setIsSubmitting(true);
     setError('');
     
     try {
@@ -109,14 +123,26 @@ const Profile = () => {
         
         dispatch(setUser(userInfo));
         console.log('Updated user data stored in Redux:', userInfo);
+        setEditMode(false);
       }
-      
-      setEditMode(false);
-    } catch (err) {
-      console.error('Error updating profile:', err);
-      setError('Failed to update profile');
+    } catch (err: any) {
+      if (err.response) {
+        if (err.response.status === 401) {
+          console.log('User not authenticated, redirecting to login page');
+          navigate('/login');
+        } else {
+          console.error('Error updating profile:', err);
+          setError('Erreur lors de la mise à jour du profil. Veuillez réessayer.');
+        }
+      } else if (err.request) {
+        console.error('Error updating profile:', err);
+        setError('Problème de connexion. Vérifiez votre connexion internet.');
+      } else {
+        console.error('Error updating profile:', err);
+        setError('Une erreur inattendue est survenue.');
+      }
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -125,7 +151,9 @@ const Profile = () => {
       <main className="main bg-dark">
         <div className="header">
           <h1>Welcome back</h1>
-          <p className="text-center">Loading your profile...</p>
+          <div className="loading-spinner">
+            <p className="text-center">Chargement de votre profil...</p>
+          </div>
         </div>
       </main>
     );
@@ -135,14 +163,14 @@ const Profile = () => {
     return (
       <main className="main bg-dark">
         <div className="header">
-          <h1>Error</h1>
-          <p className="text-center">{error}</p>
+          <h1>Erreur</h1>
+          <p className="text-center text-red-500">{error}</p>
           <button 
             className="edit-button" 
             onClick={() => navigate('/login')}
             style={{ marginTop: '20px' }}
           >
-            Return to Login
+            Retour à la connexion
           </button>
         </div>
       </main>
@@ -168,6 +196,7 @@ const Profile = () => {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="input-group">
@@ -178,10 +207,17 @@ const Profile = () => {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div className="button-group">
-              <button type="submit" className="save-button">Save</button>
+              <button 
+                type="submit" 
+                className="save-button"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? 'Enregistrement...' : 'Save'}
+              </button>
               <button 
                 type="button" 
                 className="cancel-button"
@@ -192,6 +228,7 @@ const Profile = () => {
                     setLastName(user.lastName);
                   }
                 }}
+                disabled={isSubmitting}
               >
                 Cancel
               </button>

@@ -302,3 +302,121 @@ body {
     width: 200px;
   }
 }
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.loading-spinner p {
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.text-red-500 {
+  color: #ef4444;
+}
+
+.text-gray-400 {
+  color: #9ca3af;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.test-credentials-button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  background-color: #4b5563;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.test-credentials-button:hover {
+  background-color: #374151;
+}
+
+.test-credentials-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
+  color: #fff;
+  font-weight: bold;
+}
+
+.input-group input {
+  padding: 0.5rem;
+  border: 1px solid #4b5563;
+  border-radius: 4px;
+  background-color: #1f2937;
+  color: #fff;
+}
+
+.input-group input:disabled {
+  background-color: #374151;
+  cursor: not-allowed;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.save-button {
+  padding: 0.5rem 1rem;
+  background-color: #00bc77;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.save-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  padding: 0.5rem 1rem;
+  background-color: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.cancel-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}

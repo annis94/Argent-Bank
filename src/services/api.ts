@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { store } from '../store';
+import { logout } from '../store/slices/authSlice';
 
 const API_URL = 'http://localhost:3001/api/v1';
 
@@ -23,6 +25,35 @@ api.interceptors.request.use((config) => {
   
   return config;
 });
+
+// Intercepteur pour gérer les erreurs de réponse
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      // Erreur 401 : Token invalide ou expiré
+      if (error.response.status === 401) {
+        store.dispatch(logout());
+        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+      
+      // Erreur 500 : Erreur serveur
+      if (error.response.status === 500) {
+        console.error('Erreur serveur:', error.response.data);
+      }
+    } else if (error.request) {
+      // Erreur réseau
+      console.error('Erreur réseau:', error.request);
+    } else {
+      // Autre erreur
+      console.error('Erreur:', error.message);
+    }
+    
+    return Promise.reject(error);
+  }
+);
 
 /**
  * Fonction de login
