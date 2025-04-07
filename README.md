@@ -1,45 +1,125 @@
 # Argent Bank - Application Web React
 
-Ce projet est une application web développée avec React et Redux dans le cadre d'une mission réalisée pour le compte d'Argent Bank, une nouvelle banque en ligne.
+![Argent Bank Logo](./src/assets/argent-bank-logo.svg)
 
-## Contexte
+Ce projet est une application web développée avec React et Redux pour Argent Bank, une nouvelle banque en ligne qui souhaite moderniser ses services.
 
-Argent Bank cherche à se lancer sur le marché avec une plateforme en ligne moderne et fonctionnelle. Le projet se divise en deux phases :
+## 📋 Table des matières
 
-- **Phase 1** : Authentification des utilisateurs – Développement d'une application web permettant aux clients de se connecter, consulter et modifier leur profil.
-- **Phase 2** : Conception des spécifications d'API pour la gestion des transactions (actuellement en cours de réflexion).
+- [Contexte](#contexte)
+- [Fonctionnalités](#fonctionnalités)
+- [Technologies utilisées](#technologies-utilisées)
+- [Prérequis](#prérequis)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Utilisation](#utilisation)
+- [API Documentation](#api-documentation)
+- [Phase 2 - Roadmap](#phase-2---roadmap)
 
-## Objectifs de la Phase 1
+## 🎯 Contexte
 
-L’application doit permettre les fonctionnalités suivantes :
+Argent Bank est en phase de développement de sa plateforme. Le projet se déroule en deux phases :
+- **Phase 1** : Authentification des utilisateurs et gestion des profils
+- **Phase 2** : Transactions API (en cours de spécification)
 
-- L'utilisateur peut visiter la page d’accueil.
-- L'utilisateur peut se connecter à son compte.
-- L'utilisateur peut se déconnecter.
-- L'utilisateur peut consulter les informations de son profil uniquement après s'être connecté avec succès.
-- L'utilisateur peut modifier ses informations personnelles, qui seront sauvegardées dans la base de données.
+## ✨ Fonctionnalités
 
-Le HTML statique et le CSS des pages principales (accueil, connexion, profil) sont fournis comme point de départ.
+### Phase 1 - Authentification
+- Page d'accueil publique
+- Authentification des utilisateurs
+- Gestion du profil utilisateur
+  - Consultation des informations
+  - Modification des données personnelles
+- Déconnexion sécurisée
 
-## Stack Technique
+## 🛠 Technologies utilisées
 
-- Front-end : React (Vite)
-- State management : Redux / Redux Toolkit
-- API : Swagger (fournie par l’équipe back-end d’Argent Bank)
-- Authentification : via token JWT
+- **Frontend**:
+  - React 18 avec TypeScript
+  - Vite comme bundler
+  - Redux Toolkit pour la gestion d'état
+  - React Router pour la navigation
+  - Tailwind CSS pour le styling
+  
+- **Authentification**:
+  - JWT (JSON Web Tokens)
 
-## Installation
+## 📋 Prérequis
 
-1. Cloner le projet :
+- Node.js (version 18 ou supérieure)
+- npm (version 9 ou supérieure)
+- Git
+
+## 🚀 Installation
+
+1. **Cloner le repository**
+   ```bash
    git clone https://github.com/annis94/Argent-Bank.git
    cd Argent-Bank
+   ```
 
-   Installer les dépendances :
-npm install
+2. **Installer les dépendances**
+   ```bash
+   npm install
+   ```
 
+3. **Variables d'environnement**
+   ```bash
+   cp .env.example .env
+   ```
+   Configurez les variables selon votre environnement
 
-Démarrer le projet en mode développement :
-npm run dev
+## ⚙️ Configuration
+
+1. **Développement**
+   ```bash
+   npm run dev
+   ```
+   L'application sera disponible sur `http://localhost:5173`
+
+2. **Production**
+   ```bash
+   npm run build
+   npm run preview
+   ```
+
+## 💻 Utilisation
+
+1. **Accès à l'application**
+   - Ouvrez votre navigateur
+   - Accédez à `http://localhost:5173`
+
+2. **Connexion**
+   - Cliquez sur "Sign In"
+   - Utilisez vos identifiants
+   - Ou utilisez les identifiants de test :
+     - Email : `tony@stark.com`
+     - Mot de passe : `password123`
+
+3. **Gestion du profil**
+   - Accédez à votre profil via le menu
+   - Modifiez vos informations personnelles
+   - Sauvegardez vos modifications
+
+## 📚 API Documentation
+
+La documentation complète de l'API est disponible dans le fichier `swagger.yaml` à la racine du projet.
+
+## 🚀 Phase 2 - Roadmap
+
+La phase 2 du projet concernera la gestion des transactions :
+- Consultation des transactions par compte
+- Filtrage par mois
+- Détails des transactions
+- Gestion (ajout, modification, suppression)
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! Consultez notre guide de contribution dans `CONTRIBUTING.md`.
+
+## 📝 Licence
+
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 ## Phase 2 – Conception de l'API des transactions
 
