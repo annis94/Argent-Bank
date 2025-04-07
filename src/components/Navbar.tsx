@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UserCircle, LogOut } from 'lucide-react';
 import { logout } from '../store/slices/authSlice';
 import type { RootState } from '../store';
+import Logo from './Logo';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -17,14 +18,7 @@ const Navbar = () => {
 
   return (
     <nav className="main-nav">
-      <Link to="/" className="main-nav-logo">
-        <img
-          className="main-nav-logo-image"
-          src="/argentBankLogo.png"
-          alt="Argent Bank Logo"
-        />
-        <h1 className="sr-only">Argent Bank</h1>
-      </Link>
+      <Logo className="main-nav-logo" />
       <div>
         {isAuthenticated ? (
           <>

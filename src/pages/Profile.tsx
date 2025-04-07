@@ -180,7 +180,7 @@ const Profile = () => {
   return (
     <main className="main bg-dark">
       <div className="header">
-        <h1>Welcome back<br />{!editMode && `${firstName} ${lastName}!`}</h1>
+        <h1>Welcome back{!editMode && ` ${firstName} ${lastName}!`}</h1>
         {!editMode ? (
           <button className="edit-button" onClick={() => setEditMode(true)}>
             <UserEdit size={16} />
@@ -189,21 +189,19 @@ const Profile = () => {
         ) : (
           <form onSubmit={handleEditSubmit} className="edit-form">
             <div className="input-group">
-              <label htmlFor="firstName">First Name</label>
               <input
                 type="text"
                 id="firstName"
+                placeholder="Tony"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 required
                 disabled={isSubmitting}
               />
-            </div>
-            <div className="input-group">
-              <label htmlFor="lastName">Last Name</label>
               <input
                 type="text"
                 id="lastName"
+                placeholder="Jarvis"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
@@ -216,7 +214,7 @@ const Profile = () => {
                 className="save-button"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Enregistrement...' : 'Save'}
+                Save
               </button>
               <button 
                 type="button" 
