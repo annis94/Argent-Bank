@@ -180,59 +180,8 @@ const Profile = () => {
   return (
     <main className="main bg-dark">
       <div className="header">
-        <h1>Welcome back{!editMode && ` ${firstName} ${lastName}!`}</h1>
-        {!editMode ? (
-          <button className="edit-button" onClick={() => setEditMode(true)}>
-            <UserEdit size={16} />
-            Edit Name
-          </button>
-        ) : (
-          <form onSubmit={handleEditSubmit} className="edit-form">
-            <div className="input-group">
-              <input
-                type="text"
-                id="firstName"
-                placeholder="Tony"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                required
-                disabled={isSubmitting}
-              />
-              <input
-                type="text"
-                id="lastName"
-                placeholder="Jarvis"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                required
-                disabled={isSubmitting}
-              />
-            </div>
-            <div className="button-group">
-              <button 
-                type="submit" 
-                className="save-button"
-                disabled={isSubmitting}
-              >
-                Save
-              </button>
-              <button 
-                type="button" 
-                className="cancel-button"
-                onClick={() => {
-                  setEditMode(false);
-                  if (user) {
-                    setFirstName(user.firstName);
-                    setLastName(user.lastName);
-                  }
-                }}
-                disabled={isSubmitting}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        )}
+        <h1>Welcome back<br />Tony Jarvis!</h1>
+        <button className="edit-button">Edit Name</button>
       </div>
       <h2 className="sr-only">Accounts</h2>
       {accounts.map((account, index) => (

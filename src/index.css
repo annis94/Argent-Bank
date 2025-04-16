@@ -310,11 +310,11 @@ body {
   background-color: #fff;
   width: 80%;
   margin: 0 auto;
+  margin-bottom: 2rem;
   flex-direction: column;
   padding: 1.5rem;
   box-sizing: border-box;
   text-align: left;
-  margin-bottom: 2rem;
 }
 
 .account-amount {
@@ -346,48 +346,35 @@ body {
   font-size: 1.1rem;
   font-weight: bold;
   margin-top: 1rem;
-  background-color: #6458F5;
+  background-color: #00bc77;
   color: #fff;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
-}
-
-.transaction-button:hover {
-  background-color: #5649f5;
 }
 
 .edit-button {
   border: none;
-  background-color: #6458F5;
+  background-color: #00bc77;
   color: #fff;
   font-weight: bold;
   padding: 10px;
   margin-top: 1rem;
   cursor: pointer;
-  border-radius: 4px;
-  min-width: 100px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.edit-button:hover {
-  background-color: #5649f5;
+  width: 100px;
 }
 
 .header {
-  color: #2c3e50;
-  margin: 1.5rem 0;
+  color: white;
+  margin: 0;
+  padding: 1.5rem 0;
+  text-align: center;
 }
 
 .header h1 {
   margin: 0;
   padding: 0;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 1.5rem;
 }
 
 .loading-spinner {
@@ -506,4 +493,9 @@ body {
   .transaction-button {
     width: 200px;
   }
+}
+
+.main.bg-dark {
+  padding: 3rem;
+  display: block;
 }
