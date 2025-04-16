@@ -180,8 +180,54 @@ const Profile = () => {
   return (
     <main className="main bg-dark">
       <div className="header">
-        <h1>Welcome back<br />Tony Jarvis!</h1>
-        <button className="edit-button">Edit Name</button>
+        {!editMode ? (
+          <>
+            <h1>Welcome back<br />{firstName} {lastName}!</h1>
+            <button className="edit-button" onClick={() => setEditMode(true)}>
+              Edit Name
+            </button>
+          </>
+        ) : (
+          <form onSubmit={handleEditSubmit} className="edit-form">
+            <h1>Edit Name</h1>
+            <div className="input-group">
+              <input
+                type="text"
+                id="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First Name"
+                required
+              />
+              <input
+                type="text"
+                id="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Last Name"
+                required
+              />
+            </div>
+            <div className="button-group">
+              <button type="submit" className="save-button">
+                Save
+              </button>
+              <button
+                type="button"
+                className="cancel-button"
+                onClick={() => {
+                  setEditMode(false);
+                  if (user) {
+                    setFirstName(user.firstName);
+                    setLastName(user.lastName);
+                  }
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        )}
       </div>
       <h2 className="sr-only">Accounts</h2>
       {accounts.map((account, index) => (

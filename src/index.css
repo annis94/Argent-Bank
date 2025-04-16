@@ -430,55 +430,53 @@ body {
 
 .edit-form {
   margin: 0 auto;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  max-width: 300px;
+  color: white;
+}
+
+.edit-form h1 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
 }
 
 .input-group {
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   margin-bottom: 1rem;
   width: 100%;
-  justify-content: center;
 }
 
 .input-group input {
+  flex: 1;
   padding: 0.5rem;
   font-size: 1.1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
+  border: 1px solid #ccc;
+  border-radius: 0;
   background-color: white;
   color: #2c3e50;
-  width: 200px;
-}
-
-.input-group input::placeholder {
-  color: #9ca3af;
 }
 
 .button-group {
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
+  justify-content: center;
 }
 
 .save-button, .cancel-button {
-  padding: 8px 32px;
+  padding: 8px 20px;
   font-size: 1.1rem;
-  font-weight: normal;
-  background-color: white;
-  color: #6458F5;
-  border: 2px solid #6458F5;
-  border-radius: 4px;
+  font-weight: bold;
+  background-color: #00bc77;
+  color: white;
+  border: none;
   cursor: pointer;
   min-width: 100px;
 }
 
 .save-button:hover, .cancel-button:hover {
-  background-color: #6458F5;
-  color: white;
+  background-color: #00a067;
 }
 
 @media (min-width: 720px) {
