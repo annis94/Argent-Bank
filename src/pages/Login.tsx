@@ -91,7 +91,7 @@ const Login = () => {
   return (
     <main className="main bg-dark">
       <section className="sign-in-content">
-        <UserCircle className="sign-in-icon" size={48} />
+        <UserCircle className="sign-in-icon" />
         <h1>Sign In</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {isLoading ? (
@@ -101,7 +101,7 @@ const Login = () => {
         ) : (
           <form onSubmit={handleSubmit}>
             <div className="input-wrapper">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Username</label>
               <input
                 type="email"
                 id="email"
@@ -132,12 +132,8 @@ const Login = () => {
               />
               <label htmlFor="remember-me">Remember me</label>
             </div>
-            <button 
-              type="submit" 
-              className="sign-in-button"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Connexion...' : 'Sign In'}
+            <button type="submit" className="sign-in-button" disabled={isLoading}>
+              Sign In
             </button>
             
             {process.env.NODE_ENV === 'development' && (

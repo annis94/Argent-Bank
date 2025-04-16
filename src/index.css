@@ -19,12 +19,16 @@ body {
 
 .main {
   flex: 1;
-  background-color: #E5E5E5;
-  padding-top: 2rem;
+  background-color: #12002b;
+  padding: 0;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .bg-dark {
-  background-color: #E5E5E5;
+  background-color: #12002b;
 }
 
 .sr-only {
@@ -188,14 +192,19 @@ body {
 .sign-in-button {
   display: block;
   width: 100%;
-  padding: 8px;
+  padding: 0.5rem;
   font-size: 1.1rem;
   font-weight: bold;
   margin-top: 1rem;
-  border-color: #00bc77;
   background-color: #00bc77;
   color: #fff;
+  border: none;
+  border-radius: 0;
   cursor: pointer;
+}
+
+.sign-in-button:hover {
+  background-color: #00a067;
 }
 
 .sign-in-content {
@@ -203,20 +212,22 @@ body {
   background-color: white;
   width: 300px;
   margin: 0 auto;
-  margin-top: 3rem;
   padding: 2rem;
 }
 
 .sign-in-icon {
+  display: block;
+  margin: 0 auto 1rem;
   font-size: 5rem;
+  color: #2c3e50;
 }
 
-.input-remember {
-  display: flex;
-}
-
-.input-remember label {
-  margin-left: 0.25rem;
+.sign-in-content h1 {
+  margin: 0;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2c3e50;
 }
 
 .input-wrapper {
@@ -228,11 +239,54 @@ body {
 
 .input-wrapper label {
   font-weight: bold;
+  margin-bottom: 0.3rem;
+  font-size: 1.1rem;
+  color: #2c3e50;
 }
 
 .input-wrapper input {
-  padding: 5px;
+  padding: 8px;
   font-size: 1.2rem;
+  height: 40px;
+  border: 1px solid #ccc;
+}
+
+.input-remember {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.input-remember input[type="checkbox"] {
+  margin-right: 0.5rem;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.input-remember label {
+  margin-left: 0.25rem;
+  font-size: 1rem;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
+.sign-in-button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 2rem;
+  background-color: #00bc77;
+  color: white;
+  border: none;
+  cursor: pointer;
+  height: 40px;
+}
+
+.sign-in-button:hover {
+  background-color: #00a067;
 }
 
 .footer {
