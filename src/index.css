@@ -140,31 +140,49 @@ body {
 .features {
   display: flex;
   flex-direction: column;
+  padding: 2.5rem;
+  background-color: white;
 }
 
 @media (min-width: 920px) {
   .features {
     flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 4rem 0;
   }
 }
 
 .feature-icon {
-  width: 100px;
+  width: 152px;
+  height: 152px;
   border: 10px solid #00bc77;
   border-radius: 50%;
   padding: 1rem;
+  background-color: white;
+  margin: 0 auto;
 }
 
 .feature-item {
   flex: 1;
   padding: 2.5rem;
+  text-align: center;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .feature-item-title {
   color: #222;
   font-size: 1.25rem;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.feature-item p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #2c3e50;
 }
 
 .sign-in-button {
