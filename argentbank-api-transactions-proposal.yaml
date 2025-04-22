@@ -1,0 +1,246 @@
+swagger: '2.0'
+info:
+  title: Argent Bank API - Transaction Module Proposal (Phase 2)
+  description: Proposed API endpoints for handling user transactions. Requires JWT authentication.
+  version: '1.0.0'
+  termsOfService: 'http://swagger.io/terms/'
+host: localhost:3001
+basePath: /api/v1
+schemes:
+  - http
+
+# --- Security Definitions ---
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization 
+    in: header
+    description: JWT Authorization header using the Bearer scheme. Example: "Authorization: Bearer {token}"
+
+# --- Paths---
+paths:
+  /accounts/{accountId}/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Get transactions for a specific account
+      description: Retrieve a list of transactions for the specified bank account, optionally filtered by month/year or date range. Requires JWT token.
+      parameters:
+        - name: Authorization
+          in: header
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - name: accountId
+          in: path
+          description: The ID of the account to fetch transactions for.
+          required: true
+          type: string
+        - name: month
+          in: query
+          description: Filter transactions by month (1-12). If provided, 'year' is also required. Defaults to current month if 'year' is also omitted.
+          required: false
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 12
+        - name: year
+          in: query
+          description: Filter transactions by year (e.g., 2023). If provided, 'month' is also required. Defaults to current year if 'month' is also omitted.
+          required: false
+          type: integer
+          format: int32
+        - name: page
+          in: query
+          description: Page number for pagination (if implemented).
+          required: false
+          type: integer
+          format: int32
+          default: 1
+        - name: limit
+          in: query
+          description: Number of transactions per page (if implemented).
+          required: false
+          type: integer
+          format: int32
+          default: 10
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions retrieved successfully.
+          schema:
+            $ref: '#/definitions/TransactionListResponseWrapper'
+        '400':
+          description: Invalid query parameters (e.g., invalid month/year combination).
+        '401':
+          description: Unauthorized - Invalid or missing token.
+        '403':
+          description: Forbidden - User does not have access to this account.
+        '404':
+          description: Account not found.
+        '500':
+          description: Internal Server Error.
+
+  /transactions/{transactionId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Get transaction details
+      description: Retrieve detailed information for a specific transaction. Requires JWT token.
+      parameters:
+        - name: Authorization
+          in: header
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - name: transactionId
+          in: path
+          description: The ID of the transaction to fetch details for.
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction details retrieved successfully.
+          schema:
+            $ref: '#/definitions/TransactionDetailsResponseWrapper'
+        '401':
+          description: Unauthorized - Invalid or missing token.
+        '403':
+          description: Forbidden - User does not have access to this transaction.
+        '404':
+          description: Transaction not found.
+        '500':
+          description: Internal Server Error.
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Update transaction information
+      description: Update user-editable information for a specific transaction (e.g., category, notes). Requires JWT token. Note: Core transaction details (amount, date, description) are typically immutable.
+      parameters:
+        - name: Authorization
+          in: header
+          description: Attach Bearer JWT token
+          required: true
+          type: string
+        - name: transactionId
+          in: path
+          description: The ID of the transaction to update.
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: Fields to update (category, notes).
+          required: true
+          schema:
+            $ref: '#/definitions/TransactionUpdatePayload'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction information updated successfully. Returns the updated transaction details.
+          schema:
+            $ref: '#/definitions/TransactionDetailsResponseWrapper'
+        '400':
+          description: Invalid payload data (e.g., invalid category).
+        '401':
+          description: Unauthorized - Invalid or missing token.
+        '403':
+          description: Forbidden - User cannot modify this transaction.
+        '404':
+          description: Transaction not found.
+        '500':
+          description: Internal Server Error.
+
+# --- Definitions ( Transaction Module) ---
+definitions:
+  Transaction: 
+    type: object
+    properties:
+      transactionId:
+        type: string
+        description: Unique identifier for the transaction
+        example: txn_1KVq..."
+      date:
+        type: string
+        format: date 
+        description: Date of the transaction
+        example: "2020-06-20"
+      description:
+        type: string
+        description: Transaction description provided by the bank
+        example: "Golden Sun Bakery"
+      amount:
+        type: number
+        format: double 
+        description: Amount of the transaction
+        example: 5.00
+      balance:
+        type: number
+        format: double
+        description: Account balance after this transaction
+        example: 2082.79
+
+  TransactionDetails: 
+    allOf: 
+      - $ref: '#/definitions/Transaction'
+      - type: object
+        properties:
+          type:
+            type: string
+            description: Type of transaction (e.g., Electronic, Withdrawal, Deposit)
+            example: "Electronic"
+          category:
+            type: string
+            description: User-assigned category (editable)
+            example: "Food"
+          notes:
+            type: string
+            description: User-added notes (editable)
+            example: "Lunch meeting"
+
+  TransactionUpdatePayload:
+    type: object
+    properties:
+      category:
+        type: string
+        description: The new category for the transaction. Send empty string to clear.
+        example: "Groceries"
+      notes:
+        type: string
+        description: The new notes for the transaction. Send empty string to clear.
+        example: "Weekly shopping"
+
+  TransactionListResponseWrapper:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      message:
+        type: string
+        example: Transactions retrieved successfully
+      body:
+        type: array
+        items:
+          $ref: '#/definitions/Transaction'
+
+  TransactionDetailsResponseWrapper:
+    type: object
+    properties:
+      status:
+        type: integer
+        example: 200
+      message:
+        type: string
+        example: Transaction details retrieved successfully
+      body:
+        $ref: '#/definitions/TransactionDetails'
