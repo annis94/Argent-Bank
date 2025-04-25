@@ -13,13 +13,13 @@ schemes:
 securityDefinitions:
   Bearer:
     type: apiKey
-    name: Authorization 
+    name: Authorization
     in: header
     description: JWT Authorization header using the Bearer scheme. Example: "Authorization: Bearer {token}"
 
 # --- Paths---
 paths:
-  /accounts/{accountId}/transactions:
+  /accounts/{accountId}/transactions: 
     get:
       security:
         - Bearer: []
@@ -33,7 +33,7 @@ paths:
           description: Attach Bearer JWT token
           required: true
           type: string
-        - name: accountId
+        - name: accountId  
           in: path
           description: The ID of the account to fetch transactions for.
           required: true
@@ -84,21 +84,26 @@ paths:
         '500':
           description: Internal Server Error.
 
-  /transactions/{transactionId}:
-    get:
+  /accounts/{accountId}/transactions/{transactionId}:
+    get: 
       security:
         - Bearer: []
       tags:
         - Transaction Module
-      summary: Get transaction details
-      description: Retrieve detailed information for a specific transaction. Requires JWT token.
+      summary: Get specific transaction details for an account
+      description: Retrieve detailed information for a specific transaction belonging to the specified account. Requires JWT token.
       parameters:
         - name: Authorization
           in: header
           description: Attach Bearer JWT token
           required: true
           type: string
-        - name: transactionId
+        - name: accountId    
+          in: path
+          description: The ID of the account this transaction belongs to.
+          required: true
+          type: string
+        - name: transactionId   
           in: path
           description: The ID of the transaction to fetch details for.
           required: true
@@ -113,35 +118,43 @@ paths:
         '401':
           description: Unauthorized - Invalid or missing token.
         '403':
-          description: Forbidden - User does not have access to this transaction.
+          description: Forbidden - User does not have access to this account or the transaction does not belong to this account.
         '404':
-          description: Transaction not found.
+          description: Account or Transaction not found.
         '500':
           description: Internal Server Error.
-    put:
+
+    patch: 
       security:
         - Bearer: []
       tags:
         - Transaction Module
-      summary: Update transaction information
-      description: Update user-editable information for a specific transaction (e.g., category, notes). Requires JWT token. Note: Core transaction details (amount, date, description) are typically immutable.
+      summary: Update transaction information (partial)
+      description: Partially update user-editable information for a specific transaction (e.g., category, notes) belonging to the specified account. Requires JWT token. Core details are immutable.
       parameters:
         - name: Authorization
           in: header
           description: Attach Bearer JWT token
           required: true
           type: string
-        - name: transactionId
+        - name: accountId       
+          in: path
+          description: The ID of the account this transaction belongs to.
+          required: true
+          type: string
+        - name: transactionId  
           in: path
           description: The ID of the transaction to update.
           required: true
           type: string
-        - in: body
+        - in: body           
           name: body
-          description: Fields to update (category, notes).
+          description: Fields to update (category, notes). Only include fields you want to change.
           required: true
           schema:
             $ref: '#/definitions/TransactionUpdatePayload'
+      consumes: 
+        - application/json
       produces:
         - application/json
       responses:
@@ -150,19 +163,19 @@ paths:
           schema:
             $ref: '#/definitions/TransactionDetailsResponseWrapper'
         '400':
-          description: Invalid payload data (e.g., invalid category).
+          description: Invalid payload data (e.g., invalid category format, missing required fields if any were defined as mandatory in payload).
         '401':
           description: Unauthorized - Invalid or missing token.
         '403':
-          description: Forbidden - User cannot modify this transaction.
+          description: Forbidden - User cannot modify this transaction or it doesn't belong to the specified account.
         '404':
-          description: Transaction not found.
+          description: Account or Transaction not found.
         '500':
           description: Internal Server Error.
 
 # --- Definitions ( Transaction Module) ---
 definitions:
-  Transaction: 
+  Transaction:
     type: object
     properties:
       transactionId:
@@ -171,7 +184,7 @@ definitions:
         example: txn_1KVq..."
       date:
         type: string
-        format: date 
+        format: date
         description: Date of the transaction
         example: "2020-06-20"
       description:
@@ -180,7 +193,7 @@ definitions:
         example: "Golden Sun Bakery"
       amount:
         type: number
-        format: double 
+        format: double
         description: Amount of the transaction
         example: 5.00
       balance:
@@ -189,8 +202,8 @@ definitions:
         description: Account balance after this transaction
         example: 2082.79
 
-  TransactionDetails: 
-    allOf: 
+  TransactionDetails:
+    allOf:
       - $ref: '#/definitions/Transaction'
       - type: object
         properties:
@@ -207,16 +220,17 @@ definitions:
             description: User-added notes (editable)
             example: "Lunch meeting"
 
-  TransactionUpdatePayload:
+  TransactionUpdatePayload: 
     type: object
+    description: Object containing the fields to partially update for a transaction. Include only the fields to be changed.
     properties:
       category:
         type: string
-        description: The new category for the transaction. Send empty string to clear.
+        description: The new category for the transaction. Send empty string to clear, or omit if not changing.
         example: "Groceries"
       notes:
         type: string
-        description: The new notes for the transaction. Send empty string to clear.
+        description: The new notes for the transaction. Send empty string to clear, or omit if not changing.
         example: "Weekly shopping"
 
   TransactionListResponseWrapper:
@@ -241,6 +255,6 @@ definitions:
         example: 200
       message:
         type: string
-        example: Transaction details retrieved successfully
+        example: Transaction details retrieved successfully 
       body:
         $ref: '#/definitions/TransactionDetails'
